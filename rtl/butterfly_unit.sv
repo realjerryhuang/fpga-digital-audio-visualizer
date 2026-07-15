@@ -1,10 +1,11 @@
-module butterfly_unit 
-	#(parameter WIDTH = 32)		// # bits used in complex calculations 
-	(input logic [WIDTH-1:0] A, B,	// complex operands
+module butterfly_unit #(
+    parameter WIDTH = 32    // # bits used in complex calculations
+) (
+    input logic [WIDTH-1:0] A, B,	// complex operands
 	input logic [WIDTH-1:0] W,		// twiddle factor
 	output logic [WIDTH-1:0] out0, 	// A + B * W
 	output logic [WIDTH-1:0] out1	// A - B * W
-    );
+);
     
     // Internal signals, splitting each input into real and imaginary components
     logic signed [WIDTH/2-1:0] A_re, A_im;
