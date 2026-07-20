@@ -1,8 +1,8 @@
-module mic (
+module mic(
     input logic clk, rst,
-    input logic vauxp6, vauxn6,     // Differential analog input for microphone (channel 6)
-    output logic [15:0] mic_data,	// 16-bit ADC data output
-    output logic mic_ready 			// Indicates when new ADC data is ready
+    input logic vauxp6, vauxn6,             // Differential analog input for microphone (channel 6)
+    output logic signed [15:0] mic_data,	// 16-bit ADC data output
+    output logic mic_ready 			        // Indicates when new ADC data is ready
 );
 
     // Internal signals for ADC data and control
@@ -13,7 +13,7 @@ module mic (
     logic [4:0] channel_out;        // Channel output from XADC
 
     // ADC IP instantiation
-    xadc_wiz_0 XADC_INST (
+    xadc_wiz_0 XADC_INST(
         .dadr_in(7'h16),            // Address for the ADC channel (channel 6)
         .dclk_in(clk),              // Clock input for the ADC
         .reset_in(rst),             // Reset input for the ADC
@@ -37,7 +37,7 @@ module mic (
     // Capture ADC data and set ready flag
     always_ff @(posedge clk) begin
         if (rst) begin
-            mic_data <= 7'd0;
+            mic_data <= 16'd0;
             mic_ready <= 1'b0;
         end
         else if (adc_data_ready) begin
