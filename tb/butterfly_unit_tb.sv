@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 
+// Stale testbench; needs updating to support pipelined butterfly_unit
 module butterfly_unit_tb #(
     parameter WIDTH = 32
 ) (
