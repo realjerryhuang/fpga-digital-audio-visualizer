@@ -58,7 +58,7 @@ module butterfly_unit #(    // Pipelined into multiply and add stages!
     assign X1_im = A_im_reg - $signed(WxB_im_reg[WIDTH-2:WIDTH/2-1]);
     
     // Combine real and imaginary components of output signals
-    always_comb_ff @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if (rst) begin
             X0 <= '0;
             X1 <= '0;
