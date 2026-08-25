@@ -46,16 +46,26 @@ module butterfly_unit #(    // Pipelined into multiply and add stages!
         end
     end
 
-    /* Stage 2: Add */
-	// Internal signals, splitting each output into real and imaginary components
+    /* Stage 2: Add and 1-Bit Scale */
+	// Truncated B*W
+    logic signed [WIDTH/2-1:0] BW_re_trunc, BW_im_trunc;
+    assign BW_re_trunc = $signed(WxB_re_reg[WIDTH-2:WIDTH/2-1]);
+    assign BW_im_trunc = $signed(WxB_im_reg[WIDTH-2:WIDTH/2-1]);
+    
+    // Sum/diff with one extra bit of width to prevent overflow
+    logic signed [WIDTH/2:0] sum_re, diff_re, sum_im, diff_im;
+    assign sum_re = A_re_reg + BW_re_trunc;
+    assign diff_re = A_re_reg - BW_re_trunc;
+    assign sum_im = A_im_reg + BW_im_trunc;
+    assign diff_im = A_im_reg - BW_im_trunc;
+
+    // Scaling down through arithmetic right shift by 1 (sign extension)
 	logic signed [WIDTH/2-1:0] X0_re, X0_im;    
     logic signed [WIDTH/2-1:0] X1_re, X1_im;
-
-    // A + truncated (B * W)
-    assign X0_re = A_re_reg + $signed(WxB_re_reg[WIDTH-2:WIDTH/2-1]);
-    assign X0_im = A_im_reg + $signed(WxB_im_reg[WIDTH-2:WIDTH/2-1]);
-    assign X1_re = A_re_reg - $signed(WxB_re_reg[WIDTH-2:WIDTH/2-1]);
-    assign X1_im = A_im_reg - $signed(WxB_im_reg[WIDTH-2:WIDTH/2-1]);
+    assign X0_re = sum_re >>> 1;
+    assign X0_im = sum_im >>> 1;
+    assign X1_re = diff_re >>> 1;
+    assign X1_im = diff_im >>> 1;
     
     // Combine real and imaginary components of output signals
     always_ff @(posedge clk) begin
@@ -69,4 +79,4 @@ module butterfly_unit #(    // Pipelined into multiply and add stages!
         end
     end
     
-endmodule
+endmodule 
