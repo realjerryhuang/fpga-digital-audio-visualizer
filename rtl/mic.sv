@@ -14,7 +14,7 @@ module mic(
 
     // ADC IP instantiation
     xadc_wiz_0 XADC_INST(
-        .dadr_in(7'h16),            // Address for the ADC channel (channel 6)
+        .daddr_in(7'h16),            // Address for the ADC channel (channel 6)
         .dclk_in(clk),              // Clock input for the ADC
         .reset_in(rst),             // Reset input for the ADC
         .den_in(adc_eoc),           // Enable signal for the ADC

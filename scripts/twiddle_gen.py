@@ -21,5 +21,5 @@ def write_mem_file(N, filename):
         for packed in twiddles:
             f.write("%08X\n" % packed)
  
-N = 128     # CHANGE THIS FOR A DIFFERENT N-POINT FFT
+N = 256     # CHANGE THIS FOR A DIFFERENT N-POINT FFT
 write_mem_file(N, "twiddle_N%d.mem" % N)
